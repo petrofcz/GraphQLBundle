@@ -8,7 +8,6 @@ use Symfony\Component\HttpKernel\Kernel;
 use Youshido\GraphQL\Execution\Context\ExecutionContextInterface;
 use Youshido\GraphQL\Execution\Processor as BaseProcessor;
 use Youshido\GraphQL\Execution\ResolveInfo;
-use Youshido\GraphQL\Field\AbstractField;
 use Youshido\GraphQL\Field\Field;
 use Youshido\GraphQL\Field\FieldInterface;
 use Youshido\GraphQL\Parser\Ast\Field as AstField;
@@ -103,7 +102,9 @@ class Processor extends BaseProcessor
             $field->setContainer($this->executionContext->getContainer()->getSymfonyContainer());
         }
 
-        if (($field instanceof AbstractField) && ($resolveFunc = $field->getConfig()->getResolveFunction())) {
+        // checking for FieldInterface instead of AbstractField because of possible custom implementation of FieldInterface.
+        // dark side - no guarantee the getConfig() method is present
+        if (($field instanceof FieldInterface) && ($resolveFunc = $field->getConfig()->getResolveFunction())) {
             if ($this->isServiceReference($resolveFunc)) {
                 $service = substr($resolveFunc[0], 1);
                 $method  = $resolveFunc[1];
