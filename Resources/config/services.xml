@@ -49,8 +49,5 @@
             <tag name="security.voter" priority="255" />
         </service>
 
-        <service id="graphql.command.configure" class="Youshido\GraphQLBundle\Command\GraphQLConfigureCommand">
-            <tag name="console.command" command="graphql:configure"/>
-        </service>
     </services>
 </container>
